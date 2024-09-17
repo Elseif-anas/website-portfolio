@@ -1,0 +1,27 @@
+
+
+1) extract all files to:
+
+ d:\emu\
+
+
+2) enter binaries folder.
+
+
+3) double click:
+
+ install.cmd 
+ install.reg
+
+
+4) launch emu8086.exe
+
+
+in case of missing dll, 
+download Visual Basic Runtimes
+
+
+5) optional: replace files in options
+   folder with files from options2 or
+   options3
+

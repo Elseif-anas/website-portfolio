@@ -1,0 +1,3 @@
+; note: installation
+; of fasm version 1.64
+; is expected in \fasm\

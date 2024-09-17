@@ -1,0 +1,78 @@
+.model small
+.stack 100h
+.data
+STRING1 db "HELLO", 0
+STRING2 db "WORLD!!", 0
+N dw 3
+newString db 80 dup(?)
+
+.code
+main proc
+mov ax, @data
+mov ds, ax
+mov es, ax
+
+; Set up the addresses
+lea si, STRING1
+lea di, STRING2
+lea dx, newString
+
+; Set up lengths
+mov bx, 5  ; Length of STRING1
+mov cx, 7  ; Length of STRING2
+mov ax, N  ; Insert position N
+
+call insert
+
+; End of program
+mov ah, 4Ch
+int 21h
+main endp
+
+insert proc
+; Input:
+; SI = offset address of STRING1
+; DI = offset address of STRING2
+; BX = length of STRING1
+; CX = length of STRING2
+; AX = offset address at which to insert STRING1
+
+; Output:
+; DI = offset address of new string
+; BX = length of new string
+
+; Copy first part of STRING2 to newString
+lea di, newString
+mov dx, di
+mov di, ax ; DI now points to insertion point in newString
+mov si, di ; Save original DI in SI
+
+; Copy STRING2[0:N] to newString
+mov di, dx
+mov cx, ax
+rep movsb
+
+; Copy STRING1 to newString at position N
+lea si, STRING1
+mov cx, bx
+rep movsb
+
+; Copy remaining part of STRING2 to newString
+lea si, STRING2
+add si, ax
+lea di, newString
+add di, ax
+add di, bx
+sub cx, ax
+rep movsb
+
+; Set BX to length of newString
+lea di, newString
+add bx, ax
+add bx, cx
+
+ret
+insert endp
+end main
+
+

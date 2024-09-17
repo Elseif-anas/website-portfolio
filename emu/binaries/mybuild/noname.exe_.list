@@ -1,0 +1,139 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+noname.exe_ -- emu8086 assembler version: 4.08  
+ 
+[ 27/05/2024  --  4:54:55 pm ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       .model small
+[   2]        :                                       .stack 100h
+[   3]        :                                       .data
+[   4]    0100: 48 45 4C 4C 4F 00                     STRING1 db "HELLO", 0
+[   5]    0106: 57 4F 52 4C 44 21 21 00               STRING2 db "WORLD!!", 0
+[   6]    010E: 03 00                                 N dw 3
+[   7]    0110: 00 00 00 00 00 00 00 00 00 00 00 00   newString db 80 dup(?)
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00             
+[   8]        :                                       
+[   9]        :                                       .code
+[  10]    0160:                                       main proc
+[  11]    0160: B8 10 00                              mov ax, @data
+[  12]    0163: 8E D8                                 mov ds, ax
+[  13]    0165: 8E C0                                 mov es, ax
+[  14]        :                                       
+[  15]        :                                       ; Set up the addresses
+[  16]    0167: BE 00 00                              lea si, STRING1
+[  17]    016A: BF 06 00                              lea di, STRING2
+[  18]    016D: BA 10 00                              lea dx, newString
+[  19]        :                                       
+[  20]        :                                       ; Set up lengths
+[  21]    0170: BB 05 00                              mov bx, 5  ; Length of STRING1
+[  22]    0173: B9 07 00                              mov cx, 7  ; Length of STRING2
+[  23]    0176: A1 0E 00                              mov ax, N  ; Insert position N
+[  24]        :                                       
+[  25]    0179: E8 04 00                              call insert
+[  26]        :                                       
+[  27]        :                                       ; End of program
+[  28]    017C: B4 4C                                 mov ah, 4Ch
+[  29]    017E: CD 21                                 int 21h
+[  30]        :                                       main endp
+[  31]        :                                       
+[  32]    0180:                                       insert proc
+[  33]        :                                       ; Input:
+[  34]        :                                       ; SI = offset address of STRING1
+[  35]        :                                       ; DI = offset address of STRING2
+[  36]        :                                       ; BX = length of STRING1
+[  37]        :                                       ; CX = length of STRING2
+[  38]        :                                       ; AX = offset address at which to insert STRING1
+[  39]        :                                       
+[  40]        :                                       ; Output:
+[  41]        :                                       ; DI = offset address of new string
+[  42]        :                                       ; BX = length of new string
+[  43]        :                                       
+[  44]        :                                       ; Copy first part of STRING2 to newString
+[  45]    0180: BF 10 00                              lea di, newString
+[  46]    0183: 8B D7                                 mov dx, di
+[  47]    0185: 8B F8                                 mov di, ax ; DI now points to insertion point in newString
+[  48]    0187: 8B F7                                 mov si, di ; Save original DI in SI
+[  49]        :                                       
+[  50]        :                                       ; Copy STRING2[0:N] to newString
+[  51]    0189: 8B FA                                 mov di, dx
+[  52]    018B: 8B C8                                 mov cx, ax
+[  53]    018D: F3 A4                                 rep movsb
+[  54]        :                                       
+[  55]        :                                       ; Copy STRING1 to newString at position N
+[  56]    018F: BE 00 00                              lea si, STRING1
+[  57]    0192: 8B CB                                 mov cx, bx
+[  58]    0194: F3 A4                                 rep movsb
+[  59]        :                                       
+[  60]        :                                       ; Copy remaining part of STRING2 to newString
+[  61]    0196: BE 06 00                              lea si, STRING2
+[  62]    0199: 03 F0                                 add si, ax
+[  63]    019B: BF 10 00                              lea di, newString
+[  64]    019E: 03 F8                                 add di, ax
+[  65]    01A0: 03 FB                                 add di, bx
+[  66]    01A2: 2B C8                                 sub cx, ax
+[  67]    01A4: F3 A4                                 rep movsb
+[  68]        :                                       
+[  69]        :                                       ; Set BX to length of newString
+[  70]    01A6: BF 10 00                              lea di, newString
+[  71]    01A9: 03 D8                                 add bx, ax
+[  72]    01AB: 03 D9                                 add bx, cx
+[  73]        :                                       
+[  74]    01AD: C3                                    ret
+[  75]        :                                       insert endp
+[  76]        :                                       end main
+[  77]        :                                       
+[  78]        :                                       
+ 
+===================================================================================================
+ 
+EXE HEADER - bytes from 0000 to 01FF inclusive.
+
+0000: 4D      -   exe signature (M)
+0001: 5A      -   exe signature (Z)
+0002: AE      -   bytes on last page (l.byte)
+0003: 01      -   bytes on last page (h.byte)
+0004: 02      -   512 byte pages in file (l.byte)
+0005: 00      -   512 byte pages in file (h.byte)
+0006: 01      -   relocations (l.byte)
+0007: 00      -   relocations (h.byte)
+0008: 20      -   paragraphs in header (l.byte)
+0009: 00      -   paragraphs in header (h.byte)
+000A: 00      -   minimum memory (l.byte)
+000B: 00      -   minimum memory (h.byte)
+000C: FF      -   maximum memory (l.byte)
+000D: FF      -   maximum memory (h.byte)
+000E: 00      -   SS - stack segment (l.byte)
+000F: 00      -   SS - stack segment (h.byte)
+0010: 00      -   SP - stack pointer (l.byte)
+0011: 01      -   SP - stack pointer (h.byte)
+0012: E0      -   check sum (l.byte)
+0013: 64      -   check sum (h.byte)
+0014: 00      -   IP - instruction pointer (l.byte)
+0015: 00      -   IP - instruction pointer (h.byte)
+0016: 16      -   CS - code segment (l.byte)
+0017: 00      -   CS - code segment (h.byte)
+0018: 1E      -   relocation table adress (l.byte)
+0019: 00      -   relocation table adress (h.byte)
+001A: 00      -   overlay number (l.byte)
+001B: 00      -   overlay number (h.byte)
+001C: 01      -   signature (l.byte)
+001D: 00      -   signature (h.byte)
+001E: 01      -   relocation table - offset inside segment (l.byte)
+001F: 00      -   relocation table - offset inside segment (h.byte)
+0020: 16      -   relocation table - segment anchor (l.byte)
+0021: 00      -   relocation table - segment anchor (h.byte)
+0022 to 01FF  -   reserved relocation area  (00) 
+
+
+
+
+===================================================================================================

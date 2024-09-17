@@ -1,0 +1,4 @@
+mov al,255
+mov ah,255
+mul ah
+

@@ -1,0 +1,17 @@
+org 100h
+
+mov ah, 02h
+mov dl, 0
+
+print_loop:
+int 21h
+inc dl
+cmp dl, 0
+jne print_loop
+
+mov ah, 4Ch
+int 21h
+
+ret
+
+
